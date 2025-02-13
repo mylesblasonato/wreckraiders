@@ -13,6 +13,7 @@ public class Treasure : MonoBehaviour
             if(GameManager.Instance != null)
                 GameManager.Instance.AddGold(goldAmount);
             Debug.Log($"Treasure Collected! +{goldAmount} Gold");
+            Destroy(gameObject);
             LevelManager.Instance.TakeTreasure(gameObject, gameObject.transform.parent.parent.gameObject); // Remove treasure after collection
         }
     }

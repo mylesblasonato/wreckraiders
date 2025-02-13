@@ -23,6 +23,22 @@ public class InputManager : MonoBehaviour
     [Header("Mouse Settings")]
     public float mouseSensitivity = 2f;
 
+    public static InputManager Instance { get; private set; } // Singleton Instance
+
+    private void Awake()
+    {
+        // Ensure only one instance exists
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
     void Start()
     {
         shipController = ship.GetComponent<ShipController>();
@@ -34,7 +50,22 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        HandleSwitching();
+        if (!GameManager.Instance.IsPaused)
+            HandleSwitching();
+    }
+
+    public void HideAndLockCursor(bool hideAndlock)
+    {
+        if (hideAndlock)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     void HandleSwitching()
@@ -71,6 +102,9 @@ public class InputManager : MonoBehaviour
 
         subController.transform.position = new Vector3(shipController.transform.position.x, subOriginalPosition.y, shipController.transform.position.z);
         subController.transform.rotation = shipController.transform.rotation;
+
+        if (GameManager.Instance.levelHolder.childCount > 0)
+            LevelManager.Instance.AllTreasureFound(GameManager.Instance.levelHolder.GetChild(0).gameObject);
     }
 
     void ActivateSubmarineView()

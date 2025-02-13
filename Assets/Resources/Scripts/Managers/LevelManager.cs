@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     public Transform listOfTreasure;
 
     public List<GameObject> treasureList;
+    private GameObject currentLevel;
     public static LevelManager Instance { get; private set; } // Singleton Instance
 
     private void Awake()
@@ -22,6 +23,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
     }
+
     private void Start()
     {
         SetupTreasure();
@@ -47,8 +49,7 @@ public class LevelManager : MonoBehaviour
 
     public void TakeTreasure(GameObject treasure, GameObject level)
     {
-        Destroy(treasure);
+        currentLevel = level;
         treasureList.Remove(treasure);
-        AllTreasureFound(level);
     }
 }

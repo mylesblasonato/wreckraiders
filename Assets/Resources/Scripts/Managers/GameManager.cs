@@ -18,7 +18,12 @@ public class GameManager : MonoBehaviour
     public int lives = 3;
     public ParticleSystem hit;
     public GameObject[] maps; // Array of map objects
-    private GameObject previousMap;
+    public GameObject previousMap;
+    public Transform levelHolder;
+    public bool IsPaused;
+    public CanvasGroup portUI;
+    public Port currentPort;
+    public TextMeshProUGUI priceLabel, upgradeLabel;
 
     private void Awake()
     {
@@ -36,21 +41,30 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        InputManager.Instance.HideAndLockCursor(true);
+
         redXMarker.transform.GetChild(0).gameObject.SetActive(false);
         UpdateGoldUI();
         UpdateLivesUI(0);
+
+        currentPort = null;
     }
 
-    private void Update()
+    public void SetPort(Port newPort)
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            PurchaseMap();
-        }
+        currentPort = newPort;
+        priceLabel.text = "BUY MAP\n(" + currentPort.mapPrice.ToString() + "G)";
+        upgradeLabel.text = "BUY UPGRADE\n(" + currentPort.upgradePrice.ToString() + "G)";
+    }
+
+    public void Pause(bool pause)
+    {
+        IsPaused = pause;
     }
 
     public void PurchaseMap()
     {
+        mapCost = currentPort.mapPrice;
         if (playerGold >= mapCost)
         {
             redXMarker.transform.GetChild(0).gameObject.SetActive(true);

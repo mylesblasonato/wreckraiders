@@ -13,9 +13,6 @@ public class SubmarineController : MonoBehaviour
     private void Start()
     {
         mainCam = Camera.main;
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -28,6 +25,9 @@ public class SubmarineController : MonoBehaviour
     {
         float move = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         transform.Translate(Vector3.forward * move);
+
+        float strafe = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        transform.Translate(Vector3.right * strafe);
     }
 
     public void RotateWithMouse()
